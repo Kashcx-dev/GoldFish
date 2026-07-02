@@ -23,7 +23,7 @@ const initDatabase = async () => {
 		console.log("Database connected successfully at:", testRes.rows[0].now);
 
 		// Read and execute schema
-		const schemaPath = path.join(__dirname, "schema.sql");
+		const schemaPath = path.join(__dirname, "../database/schema.sql");
 		if (fs.existsSync(schemaPath)) {
 			const schemaSql = fs.readFileSync(schemaPath, "utf8");
 			await pool.query(schemaSql);

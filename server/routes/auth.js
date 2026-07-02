@@ -98,7 +98,7 @@ router.post("/verify-signup-otp", async (req, res) => {
 	if (record.code === otp) {
 		try {
 			const newUser = await pool.query(
-				"INSERT INTO users (name, email, password_hash) VALUES ($1, $2, $3) RETURNING id, name, email, created_at",
+				"INSERT INTO users (name, email, password_hash) VALUES ($1, $2, $3) RETURNING id, name, email, token_count, created_at",
 				[record.name, record.email, record.password_hash],
 			);
 
@@ -116,6 +116,7 @@ router.post("/verify-signup-otp", async (req, res) => {
 					id: newUser.rows[0].id,
 					name: newUser.rows[0].name,
 					email: newUser.rows[0].email,
+					token_count: newUser.rows[0].token_count,
 				},
 			});
 		} catch (error) {
@@ -227,6 +228,7 @@ router.post("/verify-otp", async (req, res) => {
 				id: user.id,
 				name: user.name,
 				email: user.email,
+				token_count: user.token_count,
 			},
 		});
 	}
@@ -260,7 +262,7 @@ router.get("/getuser", fetchuser, async (req, res) => {
 	try {
 		const userId = req.user.id;
 		const user = await pool.query(
-			"SELECT id, name, email, created_at FROM users WHERE id = $1",
+			"SELECT id, name, email, token_count, created_at FROM users WHERE id = $1",
 			[userId],
 		);
 		res.json({ success: true, user: user.rows[0] });
