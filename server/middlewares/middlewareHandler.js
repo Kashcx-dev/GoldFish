@@ -16,8 +16,8 @@ export const authLimiter = rateLimit({
 
 // Middleware to identify client type (dashboard vs app)
 export const identifyClient = (req, res, next) => {
-	const clientType = req.header("X-Client-Type") || "dashboard";
-	req.clientType = clientType; // "dashboard" or "app"
+	const clientType = req.header("X-Client-Type") || "webpage";
+	req.clientType = clientType; // "webpage" or "app"
 	next();
 };
 
